@@ -1,19 +1,36 @@
 {"intents": [
-  {"tag": "greeting",
-    "patterns": ["Hi", "How are you", "Is anyone there?", "Hello", "Good day"],
-    "responses": ["Hello, thanks for visiting", "Good to see you again", "Hi there, how can I help?"],
-    "context_set": ""
+  {"tag": "start_conversation",
+         "patterns": ["Hi there", "Is anyone there?","Hey","Hola", "Hello", "Good day","Hi"],
+         "responses": ["Hello, I'm happy to assist you", "Happy to have you here", "Good to see you again", "Hi there, how can I help?"],
+         "context": [""]
   },
-  {"tag": "goodbye",
-    "patterns": ["Bye", "See you later", "Goodbye"],
-    "responses": ["See you later, thanks for visiting", "Have a nice day", "Bye! Come back again soon."]
+  {"tag": "what_are_you",
+   "patterns": ["What is your name?", "what are you?", "who are you?","your name pls?"],
+   "responses": ["Hi, I'm Shopinsky your personal shopping assistent", "I'm Shopinsky ", "Call me Shopinsky"],
+   "context": [""]
+  },
+  {"tag": "end_conversation",
+   "patterns": ["Bye", "See you later", "Goodbye", "Nice chatting to you, bye", "Till next time", "Bye Shopinsky"],
+   "responses": ["Have a lovely day!", "Have a nice time with you product", "Enjoy your new product!"],
+   "context": [""]
   },
   {"tag": "thanks",
-    "patterns": ["Thanks", "Thank you", "That's helpful"],
-    "responses": ["Happy to help!", "Any time!", "My pleasure"]
+   "patterns": ["Thanks", "Thank you", "That's helpful", "Awesome, thanks", "Thanks for helping me"],
+   "responses": ["Happy to help!", "Any time!", "My pleasure"," Sure thing!","Have fun with your electronics!"],
+   "context": [""]
+  },
+  {"tag": "confused",
+   "patterns": [],
+   "responses": ["Sorry, kindly rephrase the question","Sorry, can't understand you", "Please give me more information", "Not sure I understand"],
+   "context": [""]
+  },
+  {"tag": "options",
+   "patterns": ["How can you help me?", "What can you do?", "What help you provide?", "How can you be helpful?", "What support do you offered","What do you know?","what help?","What are you about?"],
+   "responses": ["I am your personal shopping assistant Shopinsky. I'll help you buying the newest tech!"],
+   "context": [""]
   },
   {"tag": "categories",
-    "patterns": ["What do you offer?", "What can i buy?", "What do you sell?" ],
+    "patterns": ["What do you offer?", "What can i buy?", "What do you sell?", "What categories do you have?" ],
     "responses": ["We are offering computers, mobile phones, consoles and tablets", "You can buy electronics here", "Computers, Mobile phones, consoles and tablets"]
   },
   {"tag": "phones",
@@ -40,15 +57,15 @@
     "patterns": ["Are you open today?", "When do you open today?", "What are your hours today?"],
     "responses": ["We're open every day from 9am-9pm", "Our hours are 9am-9pm every day"]
   },
-  {"tag": "rental",
-    "patterns": ["Can we rent a moped?", "I'd like to rent a moped", "How does this work?" ],
-    "responses": ["Are you looking to rent today or later this week?"],
-    "context_set": "rentalday"
+  {"tag": "buy",
+    "patterns": ["Can i buy a computer?","Can i buy a phone?","Can i buy a laptop?","Can i buy console?", "I'd like to buy a phone","I'd like to buy a computer","I'd like to buy a console","I'd like to buy a tablet", "How does this work?" ],
+    "responses": ["If you want to see our products then ask for our categories."],
+    "context_set": "categoriesbuying"
   },
-  {"tag": "today",
-    "patterns": ["today"],
-    "responses": ["For rentals today please call 1-800-MYMOPED", "Same-day rentals please call 1-800-MYMOPED"],
-    "context_filter": "rentalday"
+  {"tag": "newest",
+    "patterns": ["newest"],
+    "responses": ["We only just got the Iphone 12 and Iphone 12 Pro", "We sell the latest Iphone models"],
+    "context_filter": "categoriesbuying"
   }
 ]
 }
