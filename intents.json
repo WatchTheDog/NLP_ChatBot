@@ -12,16 +12,28 @@
     "patterns": ["Thanks", "Thank you", "That's helpful"],
     "responses": ["Happy to help!", "Any time!", "My pleasure"]
   },
-  {"tag": "hours",
-    "patterns": ["What hours are you open?", "What are your hours?", "When are you open?" ],
-    "responses": ["We're open every day 9am-9pm", "Our hours are 9am-9pm every day"]
+  {"tag": "categories",
+    "patterns": ["What do you offer?", "What can i buy?", "What do you sell?" ],
+    "responses": ["We are offering computers, mobile phones, consoles and tablets", "You can buy electronics here", "Computers, Mobile phones, consoles and tablets"]
   },
-  {"tag": "mopeds",
-    "patterns": ["Which mopeds do you have?", "What kinds of mopeds are there?", "What do you rent?" ],
-    "responses": ["We rent Yamaha, Piaggio and Vespa mopeds", "We have Piaggio, Vespa and Yamaha mopeds"]
+  {"tag": "phones",
+    "patterns": ["What phones do you have?", "I want to buy a phone", "What phone brands do you sell?" ],
+    "responses": ["We sell Samsung, Apple and Xiaomi", "We have Apple, Samsung and Xiaomi", "We offer the following brands: Xiaomi, Samsung and Apple"]
+  },
+ {"tag": "computers",
+    "patterns": ["What computers do you have?", "I want to buy a computer", "What computer brands do you sell?" ],
+    "responses": ["We offer computers from HP and Apple", "We only sell computers from HP and Apple", "HP and Apple are the only brands we sell"]
+  },
+ {"tag": "consoles",
+    "patterns": ["What consoles do you have?", "I want to buy a console", "Do you sell Xbox?", "Do you sell Playstation?", "I want to buy the newest console", "I want to buy a xbox", "I want to buy a playstation" ],
+    "responses": ["We offer XBox and Playstation", "You can buy the newest XBox and Playstation", "We offer the latest consoles from XBox and Playstation"]
+  },
+  {"tag": "tablets",
+    "patterns": ["What tablets do you have?", "I want to buy a tablet", "Do you sell Apple?", "Do you have iPad?", "I want to buy the iPad", "I want to buy the Ipad Pro", "What tablet brands do you have?" ],
+    "responses": ["We sell Apple iPad", "We sell tablets from Apple", "You can buy the latest Apple tablet here"]
   },
   {"tag": "payments",
-    "patterns": ["Do you take credit cards?", "Do you accept Mastercard?", "Are you cash only?" ],
+    "patterns": ["Do you take credit cards?", "Do you accept Mastercard?", "How can i pay?", "I want to pay", "What payments methods do you offer?" ],
     "responses": ["We accept VISA, Mastercard and AMEX", "We accept most major credit cards"]
   },
   {"tag": "opentoday",
