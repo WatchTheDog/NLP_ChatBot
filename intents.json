@@ -1,42 +1,90 @@
 {"intents": [
-  {"tag": "greeting",
-    "patterns": ["Hi", "How are you", "Is anyone there?", "Hello", "Good day"],
-    "responses": ["Hello, thanks for visiting", "Good to see you again", "Hi there, how can I help?"],
-    "context_set": ""
-  },
-  {"tag": "goodbye",
-    "patterns": ["Bye", "See you later", "Goodbye"],
-    "responses": ["See you later, thanks for visiting", "Have a nice day", "Bye! Come back again soon."]
-  },
-  {"tag": "thanks",
-    "patterns": ["Thanks", "Thank you", "That's helpful"],
-    "responses": ["Happy to help!", "Any time!", "My pleasure"]
-  },
-  {"tag": "hours",
-    "patterns": ["What hours are you open?", "What are your hours?", "When are you open?" ],
-    "responses": ["We're open every day 9am-9pm", "Our hours are 9am-9pm every day"]
-  },
-  {"tag": "mopeds",
-    "patterns": ["Which mopeds do you have?", "What kinds of mopeds are there?", "What do you rent?" ],
-    "responses": ["We rent Yamaha, Piaggio and Vespa mopeds", "We have Piaggio, Vespa and Yamaha mopeds"]
-  },
-  {"tag": "payments",
-    "patterns": ["Do you take credit cards?", "Do you accept Mastercard?", "Are you cash only?" ],
-    "responses": ["We accept VISA, Mastercard and AMEX", "We accept most major credit cards"]
-  },
-  {"tag": "opentoday",
-    "patterns": ["Are you open today?", "When do you open today?", "What are your hours today?"],
-    "responses": ["We're open every day from 9am-9pm", "Our hours are 9am-9pm every day"]
-  },
-  {"tag": "rental",
-    "patterns": ["Can we rent a moped?", "I'd like to rent a moped", "How does this work?" ],
-    "responses": ["Are you looking to rent today or later this week?"],
-    "context_set": "rentalday"
-  },
-  {"tag": "today",
-    "patterns": ["today"],
-    "responses": ["For rentals today please call 1-800-MYMOPED", "Same-day rentals please call 1-800-MYMOPED"],
-    "context_filter": "rentalday"
-  }
-]
+        {"tag": "start_conversation",
+         "patterns": ["Hi there", "Is anyone there?","Hey","Hola", "Hello", "Good day","Hi"],
+         "responses": ["Hello, what can i do for you?", "Happy to have you here", "Good to see you", "Hi there, how can I help?"],
+         "context": [""]
+        },
+	    {"tag": "what_are_you",
+         "patterns": ["What is your name?", "what are you?", "who are you?","your name pls?"],
+         "responses": ["Hi, I'm  Shopify", "I'm Shopify ", "Call me Shopify"],
+         "context": [""]
+        },
+        {"tag": "end_conversation",
+         "patterns": ["Bye", "See you later", "Goodbye", "Nice chatting to you, bye", "Till next time"],
+         "responses": ["Have a lovely day!", "Have a nice time at your next concert", "Enjoy the concert!","Have fun"],
+         "context": [""]
+        },
+        {"tag": "thanks",
+         "patterns": ["Thanks", "Thank you", "That's helpful", "Awesome, thanks", "Thanks for helping me"],
+         "responses": ["Happy to help!", "Any time!", "My pleasure","Always :)","Have fun at your concert"],
+         "context": [""]
+        },
+        {"tag": "confused",
+         "patterns": [],
+         "responses": ["Sorry, kindly rephrase the question","Sorry, can't understand you", "Please give me more information", "Not sure I understand"],
+         "context": [""]
+        },
+        {"tag": "options",
+         "patterns": ["How can you help me?", "What can you do?", "What help you provide?", "How can you be helpful?", "What support do you offered","What do you know?","what help?","What are you about?"],
+         "responses": ["I can help you find tickets for events"],
+         "context": [""]
+        },
+  	    {"tag": "cities",
+         "patterns": ["Where are the next events?", "I want to buy tickets", "Where can i buy tickets?", "I want to go to a concert","What city is the event in?", "Show me all cities"],
+         "responses": ["You can buy tickets for events in Frankfurt and Darmstadt","I only offer tickets for Frankfurt and Darmstadt","Frankfurt and Darmstadt are the only cities i can offer to you right now"],
+         "context": [""]
+        },
+        {"tag": "events_frankfurt",
+         "patterns": ["Tell me more about the events in Frankfurt", "Frankfurt", "events in Frankfurt", "What are the next events in Frankfurt?", "Show me all events in Frankfurt", "What kind of events are in Frankfurt?", "I want to buy tickets for a event in Frankfurt"],
+         "responses": ["The next events in Frankfurt are, \n Ehrlich Brothers - Let it Snow, Götz Widmann - Das Beste, Staatliches Russisches Ballett Moskau- Schwansee"],
+         "context": [""]
+        },
+        {"tag": "events_darmstadt",
+         "patterns": ["Tell me more about the events in Darmstadt", "Darmstadt", "events in Darmstadt", "What are the next events in Darmstadt?", "Show me all events in Darmstadt", "What kind of events are in Darmstadt?", "I want to buy tickets for a event in Darmstadt"],
+         "responses": ["The next events in Darmstadt are, \n Glanz auf dem Vulkan: Die 20er Jahre Show, DinnerKrimi - Ein Schuss ins Blaue, New York Gospel Stars"],
+         "context": [""]
+        },
+          {"tag": "events_general",
+         "patterns": ["Tell me more about the events", "What are the next events?", "Show me all events", "Events", "I want to buy tickets for a event"],
+         "responses": ["The next events in Frankfurt are, \n Ehrlich Brothers - Let it Snow, Götz Widmann - Das Beste, Staatliches Russisches Ballett Moskau - Schwansee \n The next events in Darmstadt are, \n Glanz auf dem Vulkan: Die 20er Jahre Show, DinnerKrimi - Ein Schuss ins Blaue, New York Gospel Stars"],
+         "context": [""]
+        },
+        {"tag": "prices",
+         "patterns": ["How much is one event?", "I want to buy tickets", "What are the prices?", "How much for one Ticket?", "Tell me about the prices" ],
+         "responses": ["For more information on prices you have to enter the event name"],
+         "context": [""]
+        },
+        {"tag": "ehrlich_brothers",
+         "patterns": ["Ehrlich Brothers - Let it Snow","I want tickets for the Ehrlich Brothers", "How much are the tickets for Ehrlich Brothers?", "Tickets for Ehrlich Brothers"],
+         "responses": ["Tickets for the Ehrlich Brothers start at 45€", "There are 6 categories and the best categorie costs 117€"],
+         "context": [""]
+        },
+        {"tag": "götz_widmann",
+         "patterns": ["Götz Widmann - Das Beste","I want tickets for Götz Widmann", "How much are the tickets for Götz Widmann?", "Tickets for Götz Widmann"],
+         "responses": ["Tickets for the Götz Widmann are available for 18,45€"],
+         "context": [""]
+        },
+        {"tag": "ballett_schwansee",
+         "patterns": ["Staatliches Russisches Ballett Moskau - Schwansee","I want tickets for the Schwansee", "How much are the tickets for Schwansee?", "Tickets for Schwansee"],
+         "responses": ["Tickets for the Ehrlich Brothers start at 60€", "There are 5 categories and the best categorie costs 82€"],
+         "context": [""]
+        },
+        {"tag": "glanz_auf_dem_vulkan",
+         "patterns": ["Glanz auf dem Vulkan: Die 20er Jahre Show","I want tickets for Glanz auf dem Vulkan", "How much are the tickets for Glanz auf dem Vulkan?", "Tickets for Glanz auf dem Vulkan"],
+         "responses": ["Tickets for the Glanz auf dem Vulkan are available for 37,25€", "There are 5 categories and the best categorie costs 45,25€"],
+         "context": [""]
+        },
+        {"tag": "dinner_krimi",
+         "patterns": ["DinnerKrimi - Ein Schuss ins Blaue", "I want tickets for DinnerKrimi", "How much are the tickets for DinnerKrimi?", "Tickets for DinnerKrimi"],
+         "responses": ["Tickets for the DinnerKrimi are available for 101€"],
+         "context": [""]
+        },
+        {"tag": "new_york",
+         "patterns": ["New York Gospel Stars","I want tickets for New York Gospel Stars", "How much are the tickets for New York Gospel Stars?", "Tickets for New York Gospel Stars"],
+         "responses": ["Tickets for the New York Gospel Stars are available for 31,95€"],
+         "context": [""]
+        }
+   ]
 }
+
+
