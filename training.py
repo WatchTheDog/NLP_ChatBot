@@ -1,94 +1,111 @@
 import nltk
-nltk.download('punkt')
-nltk.download('wordnet')
-from nltk.stem import WordNetLemmatizer
-lemmatizer = WordNetLemmatizer()
-import json
-import pickle
-import numpy as np
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras.models import Sequential
-from tensorflow.python.keras.optimizers import TFOptimizer
-from tensorflow.keras.layers import Dense, Activation, Dropout
-import random
-import re
-from nltk.corpus import wordnet
+from nltk.stem.lancaster import LancasterStemmer
+stemmer = LancasterStemmer()
 
-words=[]
+# things we need for Tensorflow
+import numpy as np
+import tflearn
+import tensorflow as tf
+import random
+
+# import our chat-bot intents file
+import json
+with open('intents.json') as json_data:
+    intents = json.load(json_data)
+
+words = []
 classes = []
 documents = []
-ignore_words = ['?', '!']
-data_file = open('intents.json').read()
-intents = json.loads(data_file)
-
+ignore_words = ['?']
+# loop through each sentence in our intents patterns
 for intent in intents['intents']:
     for pattern in intent['patterns']:
-        #tokenize each word
+        # tokenize each word in the sentence
         w = nltk.word_tokenize(pattern)
+        # add to our words list
         words.extend(w)
-        #add documents in the corpus
+        # add to documents in our corpus
         documents.append((w, intent['tag']))
         # add to our classes list
         if intent['tag'] not in classes:
             classes.append(intent['tag'])
 
-# lemmatize, lower each word and remove duplicates
-words = [lemmatizer.lemmatize(w.lower()) for w in words if w not in ignore_words]
+# stem and lower each word and remove duplicates
+words = [stemmer.stem(w.lower()) for w in words if w not in ignore_words]
 words = sorted(list(set(words)))
-# sort classes
+
+# remove duplicates
 classes = sorted(list(set(classes)))
-# documents = combination between patterns and intents
-print (len(documents), "documents")
-# classes = intents
-print (len(classes), "classes", classes)
-# words = all words, vocabulary
-print (len(words), "unique lemmatized words", words)
-pickle.dump(words,open('words.pkl','wb'))
-pickle.dump(classes,open('classes.pkl','wb'))
 
 # create our training data
 training = []
+output = []
 # create an empty array for our output
 output_empty = [0] * len(classes)
+
 # training set, bag of words for each sentence
 for doc in documents:
     # initialize our bag of words
     bag = []
     # list of tokenized words for the pattern
     pattern_words = doc[0]
-    # lemmatize each word - create base word, in attempt to represent related words
-    pattern_words = [lemmatizer.lemmatize(word.lower()) for word in pattern_words]
-    # create our bag of words array with 1, if word match found in current pattern
+    # stem each word
+    pattern_words = [stemmer.stem(word.lower()) for word in pattern_words]
+    # create our bag of words array
     for w in words:
         bag.append(1) if w in pattern_words else bag.append(0)
 
-    # output is a '0' for each tag and '1' for current tag (for each pattern)
+    # output is a '0' for each tag and '1' for current tag
     output_row = list(output_empty)
     output_row[classes.index(doc[1])] = 1
+
     training.append([bag, output_row])
+
 # shuffle our features and turn into np.array
 random.shuffle(training)
 training = np.array(training)
-# create train and test lists. X - patterns, Y - intents
+
+# create train and test lists
 train_x = list(training[:,0])
 train_y = list(training[:,1])
-print("Training data created")
 
-# Create model - 3 layers. First layer 128 neurons, second layer 64 neurons and 3rd output layer contains number of neurons
-# equal to number of intents to predict output intent with softmax
-model = Sequential()
-model.add(Dense(128, input_shape=(len(train_x[0]),), activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(64, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(len(train_y[0]), activation='softmax'))
+# reset underlying graph data
+tf.compat.v1.reset_default_graph()
+# Build neural network
+net = tflearn.input_data(shape=[None, len(train_x[0])])
+net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, len(train_y[0]), activation='softmax')
+net = tflearn.regression(net)
 
-# Compile model. Stochastic gradient descent with Nesterov accelerated gradient gives good results for this model
-model.compile(loss='categorical_crossentropy', optimizer = 'adam', metrics=['accuracy'])
+# Define model and setup tensorboard
+model = tflearn.DNN(net, tensorboard_dir='tflearn_logs')
+# Start training (apply gradient descent algorithm)
+model.fit(train_x, train_y, n_epoch=1000, batch_size=8, show_metric=True)
+model.save('model.tflearn')
 
-#fitting and saving the model
-hist = model.fit(np.array(train_x), np.array(train_y), epochs=200, batch_size=5, verbose=1)
-model.save('chatbot_model.h5', hist)
+def clean_up_sentence(sentence):
+    # tokenize the pattern
+    sentence_words = nltk.word_tokenize(sentence)
+    # stem each word
+    sentence_words = [stemmer.stem(word.lower()) for word in sentence_words]
+    return sentence_words
 
-print("model created")
+# return bag of words array: 0 or 1 for each word in the bag that exists in the sentence
+def bow(sentence, words, show_details=False):
+    # tokenize the pattern
+    sentence_words = clean_up_sentence(sentence)
+    # bag of words
+    bag = [0]*len(words)
+    for s in sentence_words:
+        for i,w in enumerate(words):
+            if w == s:
+                bag[i] = 1
+                if show_details:
+                    print ("found in bag: %s" % w)
+
+    return(np.array(bag))
+
+# save all of our data structures
+import pickle
+pickle.dump( {'words':words, 'classes':classes, 'train_x':train_x, 'train_y':train_y}, open( "training_data", "wb" ) )
