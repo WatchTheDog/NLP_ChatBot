@@ -64,6 +64,10 @@ model.load('./model.tflearn')
 
 # create a data structure to hold user context
 context = {}
+basket = []
+helper = []
+addBasket=False
+events = [['dinner_krimi', 101], ['new_york', 31.95], ['glanz_auf_dem_vulkan', 37.25], ['future_palace', 17], ['goetz_widmann', 18.45], ['ehrlich_brothers', 45]]
 
 ERROR_THRESHOLD = 0.25
 def classify(sentence):
@@ -80,7 +84,10 @@ def classify(sentence):
     return return_list
 
 def response(sentence, userID='123', show_details=False):
+    global addBasket
     results = classify(sentence)
+    if not results:
+        results.append(('noanswer', 1.0000))
     # if we have a classification then find the matching intent tag
     if results:
         # loop as long as there are matches to process
@@ -96,16 +103,34 @@ def response(sentence, userID='123', show_details=False):
                     # check if this intent is contextual and applies to this user's conversation
                     if not 'context_filter' in i or \
                         (userID in context and 'context_filter' in i and i['context_filter'] == context[userID]):
-                        if show_details: print ('tag:', i['tag'])
+                        if i['tag'] == 'basket' and not addBasket:
+                            return "To add a event to your basket, first ask\n for more information about the event by entering\n the name of the event."
+                        if i['tag'] == 'basket' and addBasket:
+                            basket.extend(helper)
+                            helper.clear()
+                            addBasket=False
+                        else:
+                            addBasket = False
+                            helper.clear()
+                        for y in events:
+                            if i['tag'] == y[0]:
+                                helper.append(y[1])
+                                addBasket = True
+                        if i['tag'] == 'checkout':
+                            total = 0
+                            for li in basket:
+                                total = total + li
+                            sentence = "You have to pay a total of {} Euro"
+                            return sentence.format(total)
                         # a random response from the intent
                         return random.choice(i['responses'])
 
             results.pop(0)
 
+
 #Creating GUI with tkinter
 import tkinter
 from tkinter import *
-
 def send():
     msg = EntryBox.get("1.0",'end-1c').strip()
     EntryBox.delete("0.0",END)
@@ -116,6 +141,7 @@ def send():
         ChatLog.config(foreground="#442265", font=("Verdana", 12 ))
 
         res = response(msg)
+
         ChatLog.insert(END, "Bot: " + res + '\n\n')
 
         ChatLog.config(state=DISABLED)
@@ -125,13 +151,24 @@ def send():
 base = Tk()
 base.title("Hello")
 base.geometry("500x500")
-base.resizable(width=TRUE, height=TRUE)
+base.resizable(width=FALSE, height=FALSE)
 
 #Create Chat window
 ChatLog = Text(base, bd=0, bg="white", height="8", width="50", font="Arial",)
-
+res = "##General Information##\n" \
+          " Please type in lower case english \n" \
+          " This Bot suggest events for you.\n" \
+          " You can enter something like 'i would like to see a\n" \
+          " concert' and it will find a concert for you.\n" \
+          " To show more information please enter the name of\n" \
+          " the event. You can then add one Ticket to your\n" \
+          " basket by entering something like 'add to basket'.\n" \
+          " There is no 'back' functionality. So if you want to\n" \
+          " add another event you have to either enter the\n" \
+          " name or you can browse by category."
+ChatLog.insert(END, "Bot: " + res + '\n\n')
 ChatLog.config(state=DISABLED)
-
+ChatLog.yview(END)
 #Bind scrollbar to Chat window
 scrollbar = Scrollbar(base, command=ChatLog.yview, cursor="heart")
 ChatLog['yscrollcommand'] = scrollbar.set
@@ -142,14 +179,14 @@ SendButton = Button(base, font=("Verdana",12,'bold'), text="Send", width="12", h
                     command= send )
 
 #Create the box to enter message
-EntryBox = Text(base, bd=0, bg="white",width="35", height="5", font="Arial")
-#EntryBox.bind("<Return>", send)
+EntryBox = Text(base, bd=0, bg="white",width="125", height="5", font="Arial")
+EntryBox.bind("<Return>", send)
 
 
 #Place all components on the screen
 scrollbar.place(x=476,y=6, height=386)
 ChatLog.place(x=6,y=6, height=400, width=470)
-EntryBox.place(x=128, y=401, height=90, width=295)
+EntryBox.place(x=128, y=401, height=90, width=347)
 SendButton.place(x=6, y=401, height=90)
 
 base.mainloop()

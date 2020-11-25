@@ -1,12 +1,14 @@
 import nltk
 from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
-
+nltk.download('stopwords')
 # things we need for Tensorflow
 import numpy as np
 import tflearn
 import tensorflow as tf
 import random
+
+from nltk.corpus import stopwords
 
 # import our chat-bot intents file
 import json
@@ -16,7 +18,7 @@ with open('intents.json') as json_data:
 words = []
 classes = []
 documents = []
-ignore_words = ['?']
+stop_words = set(stopwords.words('english'))
 # loop through each sentence in our intents patterns
 for intent in intents['intents']:
     for pattern in intent['patterns']:
@@ -31,9 +33,8 @@ for intent in intents['intents']:
             classes.append(intent['tag'])
 
 # stem and lower each word and remove duplicates
-words = [stemmer.stem(w.lower()) for w in words if w not in ignore_words]
+words = [stemmer.stem(w.lower()) for w in words if w not in stop_words]
 words = sorted(list(set(words)))
-
 # remove duplicates
 classes = sorted(list(set(classes)))
 
@@ -81,7 +82,7 @@ net = tflearn.regression(net)
 # Define model and setup tensorboard
 model = tflearn.DNN(net, tensorboard_dir='tflearn_logs')
 # Start training (apply gradient descent algorithm)
-model.fit(train_x, train_y, n_epoch=1000, batch_size=8, show_metric=True)
+model.fit(train_x, train_y, n_epoch=600, batch_size=12, show_metric=True)
 model.save('model.tflearn')
 
 def clean_up_sentence(sentence):
