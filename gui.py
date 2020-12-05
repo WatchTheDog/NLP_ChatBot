@@ -180,8 +180,6 @@ SendButton = Button(base, font=("Verdana",12,'bold'), text="Send", width="12", h
 
 #Create the box to enter message
 EntryBox = Text(base, bd=0, bg="white",width="125", height="5", font="Arial")
-EntryBox.bind("<Return>", send)
-
 
 #Place all components on the screen
 scrollbar.place(x=476,y=6, height=386)
