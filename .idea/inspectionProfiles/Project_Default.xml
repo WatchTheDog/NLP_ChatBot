@@ -6,11 +6,12 @@
         <language minSize="53" name="Python" />
       </Languages>
     </inspection_tool>
-    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="ignoredPackages">
         <value>
-          <list size="1">
+          <list size="2">
             <item index="0" class="java.lang.String" itemvalue="tensorflow" />
+            <item index="1" class="java.lang.String" itemvalue="tensorflow-cpu" />
           </list>
         </value>
       </option>
@@ -19,6 +20,14 @@
       <option name="ignoredErrors">
         <list>
           <option value="N806" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="streamlit.ReportThread" />
+          <option value="streamlit.server.Server" />
         </list>
       </option>
     </inspection_tool>
